@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Biblioteca API - v1",
+    "description": "Coleção de testes de todos os endpoints da Biblioteca API. Execute na ordem (Collection Runner) com o banco recém-criado.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5003/api/v1" }
+  ],
+  "item": [
+    {
+      "name": "Autores",
+      "item": [
+        { "name": "01 - Listar autores (200)", "request": { "method": "GET", "url": "{{baseUrl}}/autores" } },
+        { "name": "02 - Buscar autor por id (200)", "request": { "method": "GET", "url": "{{baseUrl}}/autores/1" } },
+        { "name": "03 - Buscar autor inexistente (404)", "request": { "method": "GET", "url": "{{baseUrl}}/autores/999" } },
+        { "name": "04 - Listar livros do autor (200)", "request": { "method": "GET", "url": "{{baseUrl}}/autores/1/livros" } },
+        {
+          "name": "05 - Criar autor (201)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/autores",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"George Orwell\",\n  \"nacionalidade\": \"Britânica\",\n  \"dataNascimento\": \"1903-06-25\"\n}" }
+          }
+        },
+        {
+          "name": "06 - Criar autor inválido (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/autores",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"\",\n  \"nacionalidade\": \"\"\n}" }
+          }
+        },
+        {
+          "name": "07 - Atualizar autor (200)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/autores/3",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Eric Arthur Blair (George Orwell)\",\n  \"nacionalidade\": \"Britânica\",\n  \"dataNascimento\": \"1903-06-25\"\n}" }
+          }
+        },
+        {
+          "name": "08 - Atualizar autor inexistente (404)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/autores/999",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Ninguém\",\n  \"nacionalidade\": \"Brasileira\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Livros",
+      "item": [
+        { "name": "09 - Listar livros (200)", "request": { "method": "GET", "url": "{{baseUrl}}/livros" } },
+        { "name": "10 - Filtrar livros por gênero (200)", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/livros?genero=romance", "host": ["{{baseUrl}}"], "path": ["livros"], "query": [{ "key": "genero", "value": "romance" }] } } },
+        { "name": "11 - Buscar livro por id (200)", "request": { "method": "GET", "url": "{{baseUrl}}/livros/1" } },
+        { "name": "12 - Buscar livro inexistente (404)", "request": { "method": "GET", "url": "{{baseUrl}}/livros/999" } },
+        {
+          "name": "13 - Criar livro (201)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/livros",
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"1984\",\n  \"isbn\": \"9788535914849\",\n  \"genero\": \"Distopia\",\n  \"anoPublicacao\": 1949,\n  \"quantidadeEstoque\": 7,\n  \"autorId\": 3\n}" }
+          }
+        },
+        {
+          "name": "14 - Criar livro com dados inválidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/livros",
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"\",\n  \"isbn\": \"123\",\n  \"genero\": \"Distopia\",\n  \"anoPublicacao\": 3000,\n  \"quantidadeEstoque\": -1,\n  \"autorId\": 3\n}" }
+          }
+        },
+        {
+          "name": "15 - Criar livro com autor inexistente (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/livros",
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Livro Órfão\",\n  \"isbn\": \"9780000000001\",\n  \"genero\": \"Ficção\",\n  \"anoPublicacao\": 2020,\n  \"quantidadeEstoque\": 1,\n  \"autorId\": 999\n}" }
+          }
+        },
+        {
+          "name": "16 - Criar livro com ISBN duplicado (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/livros",
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Cópia de 1984\",\n  \"isbn\": \"9788535914849\",\n  \"genero\": \"Distopia\",\n  \"anoPublicacao\": 1949,\n  \"quantidadeEstoque\": 1,\n  \"autorId\": 3\n}" }
+          }
+        },
+        {
+          "name": "17 - Atualizar livro (200)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/livros/4",
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"A Revolução dos Bichos\",\n  \"isbn\": \"9788535909555\",\n  \"genero\": \"Distopia\",\n  \"anoPublicacao\": 1945,\n  \"quantidadeEstoque\": 10,\n  \"autorId\": 3\n}" }
+          }
+        },
+        {
+          "name": "18 - Remover autor com livros (409)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/autores/3" }
+        },
+        { "name": "19 - Remover livro (204)", "request": { "method": "DELETE", "url": "{{baseUrl}}/livros/4" } },
+        { "name": "20 - Remover livro inexistente (404)", "request": { "method": "DELETE", "url": "{{baseUrl}}/livros/999" } },
+        { "name": "21 - Remover autor (204)", "request": { "method": "DELETE", "url": "{{baseUrl}}/autores/3" } }
+      ]
+    }
+  ]
+}
